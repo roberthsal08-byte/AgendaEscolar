@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyFlow - Tu Agenda Escolar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="Style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-top">
+                <div class="logo">
+                    <i class="fas fa-graduation-cap"></i>
+                    StudyFlow
+                </div>
+                <div class="stats">
+                    <div class="stat-card">
+                        <div class="stat-number" id="pendingCount">4</div>
+                        Pendientes
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="streakCount">7</div>
+                        Racha
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number" id="completion">85%</div>
+                        Completado
+                    </div>
+                </div>
+            </div>
+            <div class="motivation" id="motivation">
+                "Un poco de progreso cada día suma mucho. ¡Tú puedes!"
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" data-tab="dashboard">
+                <i class="fas fa-home"></i> Inicio
+            </button>
+            <button class="nav-tab" data-tab="schedule">
+                <i class="fas fa-clock"></i> Horario
+            </button>
+            <button class="nav-tab" data-tab="tasks">
+                <i class="fas fa-tasks"></i> Tareas
+            </button>
+            <button class="nav-tab" data-tab="calendar">
+                <i class="fas fa-calendar"></i> Calendario
+            </button>
+            <button class="nav-tab" data-tab="racha">
+                <i class="fas fa-fire"></i> Racha
+            </button>
+        </div>
+
+        <!-- Dashboard -->
+        <div id="dashboard" class="content active">
+            <div class="card">
+                <h2 class="card-title">
+                    <i class="fas fa-chart-line"></i>
+                    Resumen rápido
+                </h2>
+                <div class="schedule-grid">
+                    <div class="schedule-item">
+                        <div class="schedule-time">📚 4 Tareas</div>
+                        <div class="schedule-subject">Pendientes hoy</div>
+                    </div>
+                    <div class="schedule-item">
+                        <div class="schedule-time">📅 2 Exámenes</div>
+                        <div class="schedule-subject">Esta semana</div>
+                    </div>
+                    <div class="schedule-item">
+                        <div class="schedule-time">⏰ 20 min</div>
+                        <div class="schedule-subject">Próxima clase</div>
+                        <div class="schedule-details">Programación</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2 class="card-title">
+                    <i class="fas fa-robot"></i>
+                    Asistente IA
+                </h2>
+                <div class="form-group">
+                    <input type="text" id="aiInput" placeholder="Escribe cómo te sientes... 'Tengo mucho que hacer'">
+                </div>
+                <button class="btn" onclick="handleAI()">
+                    <i class="fas fa-magic"></i> Analizar
+                </button>
+                <div id="aiResponse" style="margin-top: 15px; padding: 15px; background: #f1f5f9; border-radius: 12px; display: none;"></div>
+            </div>
+        </div>
+
+        <!-- Schedule -->
+        <div id="schedule" class="content">
+            <div class="card">
+                <h2 class="card-title">
+                    <i class="fas fa-clock"></i>
+                    Horario escolar de hoy
+                </h2>
+                <div class="schedule-grid" id="scheduleList">
+                    <!-- Schedule items will be populated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Tasks -->
+        <div id="tasks" class="content">
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 class="card-title">
+                        <i class="fas fa-tasks"></i>
+                        Lista de tareas
+                    </h2>
+                    <button class="btn" onclick="showTaskForm()">
+                        <i class="fas fa-plus"></i> Nueva
+                    </button>
+                </div>
+                <div class="tasks-list" id="tasksList">
+                    <!-- Tasks will be populated by JS -->
+                </div>
+            </div>
+
+            <!-- Task Form (Hidden by default) -->
+            <div id="taskForm" class="card" style="display: none;">
+                <h3>Nueva tarea</h3>
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input type="text" id="taskName" placeholder="Ej: Ejercicios página 24">
+                </div>
+                <div class="form-group">
+                    <label>Materia</label>
+                    <select id="taskSubject">
+                        <option value="math">Matemáticas</option>
+                        <option value="history">Historia</option>
+                        <option value="programming">Programación</option>
+                        <option value="chemistry">Química</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Fecha entrega</label>
+                    <input type="date" id="taskDate">
+                </div>
+                <div class="form-group">
+                    <label>Prioridad</label>
+                    <select id="taskPriority">
+                        <option value="high">Alta</option>
+                        <option value="medium">Media</option>
+                        <option value="low">Baja</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn" onclick="addTask()">Guardar</button>
+                    <button class="btn btn-danger" onclick="hideTaskForm()">Cancelar</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Calendar -->
+        <div id="calendar" class="content">
+            <div class="card">
+                <h2 class="card-title">
+                    <i class="fas fa-calendar"></i>
+                    Calendario mensual
+                </h2>
+                <div id="calendarContainer">
+                    <!-- Calendar will be populated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Streak -->
+        <div id="racha" class="content">
+            <div class="streak-card">
+                <h2 style="margin-bottom: 10px;">🔥 Racha actual: <span id="streakDisplay">7</span> días</h2>
+                <p>¡Sigue así! Completa tus tareas diarias para mantener tu racha.</p>
+                <div style="margin-top: 15px;">
+                    <span style="padding: 8px 16px; background: rgba(255,255,255,0.3); border-radius: 20px; font-size: 14px;">
+                        🏆 Insignia: Estudiante Bronce
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="JS.js"></script>
+</body>
+</html>
